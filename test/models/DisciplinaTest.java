@@ -11,7 +11,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-public class DsiciplinaTest {
+public class DisciplinaTest {
 
 	Disciplina si1 = new Disciplina("SI1", "Sistemas de Informação 1", 4);
 
