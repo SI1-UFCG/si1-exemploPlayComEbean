@@ -3,8 +3,12 @@ package models;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 import play.db.ebean.Model;
 
@@ -12,9 +16,17 @@ import play.db.ebean.Model;
 public class Disciplina extends Model {
 
 	@Id
+	@Column(name = "codigo")
 	private String codigo;
+
 	private int creditos;
 	private String nome;
+
+	@ManyToMany
+	@JoinTable(name = "dependencias", 
+			   joinColumns = @JoinColumn(name = "dependente"), 
+			   inverseJoinColumns = @JoinColumn(name = "requisito_codigo"))
+	private List<Disciplina> prerequisitos;
 
 	public static Model.Finder<String, Disciplina> find = new Model.Finder<String, Disciplina>(
 			String.class, Disciplina.class);
@@ -31,6 +43,7 @@ public class Disciplina extends Model {
 		this.codigo = codigo;
 		this.nome = nome;
 		this.creditos = creditos;
+		this.prerequisitos = prerequisitos;
 	}
 
 	@Override
@@ -47,8 +60,6 @@ public class Disciplina extends Model {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (!super.equals(obj))
-			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Disciplina other = (Disciplina) obj;
@@ -65,5 +76,13 @@ public class Disciplina extends Model {
 		} else if (!nome.equals(other.nome))
 			return false;
 		return true;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public List<Disciplina> getPrerequisitos() {
+		return prerequisitos;
 	}
 }
