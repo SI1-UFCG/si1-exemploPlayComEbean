@@ -32,7 +32,7 @@ public class DisciplinaTest {
 	@Test
 	public void deveConseguirSalvarComPrerequisitos() {
 		si1.save();
-		
+
 		Disciplina si2 = new Disciplina("SI2", "Sistemas de Informação 2", 4,
 				Arrays.asList(new Disciplina[] { si1 }));
 		Disciplina optativa = new Disciplina("OPT", "TECC: Seiquelá", 4,
@@ -43,7 +43,9 @@ public class DisciplinaTest {
 
 		List<Disciplina> todas = Disciplina.find.all();
 		assertThat(todas.size()).isEqualTo(3);
-		
-		
+
+		Disciplina recuperada = Disciplina.find.byId("SI2");
+
+		assertThat(recuperada).isEqualTo(si2);
 	}
 }

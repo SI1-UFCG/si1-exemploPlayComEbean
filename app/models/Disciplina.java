@@ -16,17 +16,20 @@ import play.db.ebean.Model;
 public class Disciplina extends Model {
 
 	@Id
-	@Column(name = "codigo")
 	private String codigo;
 
 	private int creditos;
 	private String nome;
 
 	@ManyToMany
-	@JoinTable(name = "dependencias", 
-			   joinColumns = @JoinColumn(name = "dependente"), 
-			   inverseJoinColumns = @JoinColumn(name = "requisito_codigo"))
+	@JoinTable(name = "dependencias", joinColumns = @JoinColumn(name = "dependente"), inverseJoinColumns = @JoinColumn(name = "requisito"))
 	private List<Disciplina> prerequisitos;
+	/*
+	 * JoinTable sempre precisa de nome. As colunas que vão ser usadas nessa
+	 * tabela precisam de nome porque senão o Ebean acaba gerando duas colunas
+	 * com o mesmo nome: ele gera uma tabela com duas colunas Codigo, aqui. Uma
+	 * pra a dependente e outra pra o requisito.
+	 */
 
 	public static Model.Finder<String, Disciplina> find = new Model.Finder<String, Disciplina>(
 			String.class, Disciplina.class);
@@ -49,8 +52,7 @@ public class Disciplina extends Model {
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
+		int result = prime + ((codigo == null) ? 0 : codigo.hashCode());
 		result = prime * result + creditos;
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		return result;
@@ -84,5 +86,9 @@ public class Disciplina extends Model {
 
 	public List<Disciplina> getPrerequisitos() {
 		return prerequisitos;
+	}
+
+	public String getCodigo() {
+		return codigo;
 	}
 }
